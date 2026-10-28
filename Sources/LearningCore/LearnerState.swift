@@ -89,7 +89,15 @@ public struct LearnerState: Codable, Sendable, Equatable {
         activity[LearningCalendar.dayKey(now), default: 0] += 1
     }
 
-    /// Call only after an active retrieval attempt, not after recognizing a revealed answer.
+    /// Supported practice delays review without awarding independent recall or recording a lapse.
+    public mutating func practice(_ id: String, now: Date = Date()) {
+        encounter(id, now: now)
+        records[id]!.due = now.addingTimeInterval(10 * 60)
+        reviewHistory.append(ReviewEvent(itemID: id, date: now, rating: "practice"))
+        activity[LearningCalendar.dayKey(now), default: 0] += 1
+    }
+
+    /// Award hard/good only for independent retrieval; supported failed attempts may use again.
     public mutating func rate(_ id: String, rating: RecallRating, now: Date = Date()) {
         encounter(id, now: now)
         var progress = records[id]!

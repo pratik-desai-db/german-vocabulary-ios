@@ -36,7 +36,9 @@ struct TodayView: View {
                     .font(.callout).foregroundStyle(.secondary)
             }
             Section("3 · Use it • about 10 minutes") {
-                NavigationLink("Appointment speaking paths") { DialogueView() }
+                NavigationLink("\(plan.lesson.title) speaking practice") {
+                    DialogueView(lessonID: plan.lesson.id)
+                }
                 Text("Repeat, answer with hints, then try a prepared role-play. Typing works everywhere.")
             }
             Section("4 · Connect • 5–10 minutes") {
@@ -96,25 +98,24 @@ struct LessonView: View {
                 ForEach(lesson.items) { item in
                     let available = model.state.records[item.id]?.encountered == true
                         || model.plan.remainingNewItemBudget > 0
-                    if available {
-                        NavigationLink { WordView(item: item) } label: {
-                            VStack(alignment: .leading) {
-                                Text(item.german).font(.headline)
-                                Text(item.english).foregroundStyle(.secondary)
+                    NavigationLink { WordView(item: item) } label: {
+                        VStack(alignment: .leading) {
+                            Text(item.german).font(.headline)
+                            Text(item.english).foregroundStyle(.secondary)
+                            if !available {
+                                Label("Next daily allowance", systemImage: "lock")
+                                    .font(.caption).foregroundStyle(.secondary)
                             }
                         }
-                    } else {
-                        Label("\(item.german) · next daily allowance", systemImage: "lock")
-                            .foregroundStyle(.secondary)
-                    }
+                    }.disabled(!available)
                 }
             }
             Section("Recall & use") {
                 NavigationLink("Practice \(encountered.count) encountered items") {
                     RecallView(items: encountered)
                 }.disabled(encountered.isEmpty)
-                if lesson.id == 4 || lesson.id == 7 {
-                    NavigationLink("Prepared appointment dialogue") { DialogueView() }
+                NavigationLink("Prepared speaking practice") {
+                    DialogueView(lessonID: lesson.id)
                 }
                 Text("Try a sentence about your own life. Nouns include their article and plural; learn verbs inside useful phrases.")
                 Button(model.state.completedLessons.contains(lesson.id) ? "Lesson completed" : "Mark lesson completed") {

@@ -10,6 +10,11 @@ runtime dependencies.
 Requires **macOS, Xcode 16 or newer, and iOS 17 or newer**. Linux can test the
 shared learning logic, but cannot build SwiftUI, AVFoundation, or Speech.
 
+Clone the repository on your Mac. Until the pull request is merged, switch to
+the pull request's **head branch** in Xcode's source-control navigator or your Git
+client; the default branch may not contain the app yet. After merging, use the
+default branch. No signing certificates or Apple credentials belong in Git.
+
 1. Open `DeutschDaily.xcodeproj` in Xcode. The shared **DeutschDaily** scheme
    includes the local **LearningCore** Swift package; no project generation or
    package downloads are needed.
@@ -64,14 +69,16 @@ store submission are out of scope.
   You may choose this lesson first through Course. The daily allowance still
   applies; set it to ten in Settings if the starting check used some of today's
   allowance and you want to explore all five appointment cards immediately.
-- **Recall:** translate into German, recognize audio in English, and a prepared
+- **Recall:** translate into German, optionally recognize audio in English, and a prepared
   appointment sentence completion. Try before revealing; compare with suggested
   answers, then choose Again / Hard / Good. Matching tolerates punctuation, case
   and common German keyboard spellings, but cannot assess every valid paraphrase.
   You make the final meaning-based assessment. Listening recognition, hints and
   card visits do not inflate successful independent recall totals.
-- **Speaking:** repeat → guided answer → unaided prompt → prepared receptionist
-  dialogue. Choose make-an-appointment or change-an-appointment paths. The next
+- **Speaking:** every first-week lesson has its own repeat → guided answer →
+  unaided prompt → prepared everyday dialogue. Today follows the current lesson;
+  open any other theme from Course. Appointments has make-an-appointment and
+  change-an-appointment paths. The next
   receptionist line follows that explicit choice, not AI interpretation. Hints
   and suggested responses remain available. Edit a transcript or type instead.
 - **Progress:** encountered items, items recalled at least once, total successful
@@ -88,6 +95,13 @@ recalls. The daily new-item allowance counts first encounters, so reopening the
 app does not reset it. Backlogs prioritize the oldest 20 due items and reduce
 new learning; remaining due items are left safely waiting. No streak penalty,
 automatic bulk completion, or compounded punishment for missed days.
+
+German recall is the default for **all** review items. At the start of a session
+you may choose listening recognition instead. Listening successes and hinted
+answers are logged as `practice` and return in ten minutes without raising
+independent recall counts or learned intervals. Again still brings a missed
+item back in ten minutes. A session snapshots its queue so saving an answer does
+not skip another item.
 
 State is atomically saved as JSON in the app sandbox's Application Support
 directory after changes. Save failures are shown and can be retried. Unreadable
@@ -137,6 +151,18 @@ swift test
 Tests cover course integrity, answer normalization, recall scheduling, daily
 budgets, backlogs/missed days, notes and progress, and local persistence including
 corrupt-data handling. UI and platform audio need the manual device checks below.
+Prepared-dialogue integrity and supported-practice scheduling have focused tests.
+
+### Automated Mac build
+
+The **iOS build and core tests** GitHub Actions workflow runs on a macOS runner
+for pushes and pull requests, or manually from Actions → Run workflow (once the
+workflow exists on the default branch). It runs `swift test` and builds the
+unsigned iPhone Simulator app with Xcode. This checks SwiftUI type checking and
+linking without any Apple account, device registration, or signing secrets.
+A green build is not a substitute for launching the app and checking
+microphone, speech, VoiceOver and offline behavior on your iPhone.
+If the checks fail, open the failed step and share its Xcode error output.
 
 ### Device acceptance checklist
 

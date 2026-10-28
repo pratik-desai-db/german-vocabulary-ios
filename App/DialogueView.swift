@@ -1,54 +1,19 @@
 import SwiftUI
 import LearningCore
 
-private struct DialogueTurn {
-    let title: String
-    let partner: String
-    let task: String
-    let hint: String
-    let suggestions: [String]
-}
-
 struct DialogueView: View {
+    let lessonID: Int
     @StateObject private var audio = AudioPractice()
     @Environment(\.scenePhase) private var scenePhase
     @State private var stage = 0
-    @State private var reschedule = false
+    @State private var selectedPath = 0
     @State private var hintVisible = false
     @State private var compared = false
 
-    private var turns: [DialogueTurn] {
-        [
-            DialogueTurn(title: "1 · Repeat", partner: "Ich möchte einen Termin vereinbaren.",
-                         task: "Listen, then repeat: I’d like to arrange an appointment.",
-                         hint: "Ich möchte …", suggestions: ["Ich möchte einen Termin vereinbaren."]),
-            DialogueTurn(title: "2 · Guided answer", partner: "Haben Sie morgen Zeit?",
-                         task: "Say that tomorrow works for you.",
-                         hint: "Ja … morgen … passt …", suggestions: ["Ja, morgen passt mir.", "Ja, ich habe morgen Zeit."]),
-            DialogueTurn(title: "3 · Recall", partner: "",
-                         task: "Tomorrow no longer works. Ask to reschedule your appointment.",
-                         hint: "Ich möchte meinen Termin …", suggestions: ["Ich möchte meinen Termin verschieben.", "Kann ich meinen Termin verschieben?"]),
-            DialogueTurn(title: "4 · Receptionist", partner: "Guten Tag. Wie kann ich Ihnen helfen?",
-                         task: reschedule ? "Explain that you need to change your appointment." : "Ask to make an appointment.",
-                         hint: reschedule ? "Könnte ich … verschieben?" : "Ich hätte gern …",
-                         suggestions: reschedule
-                            ? ["Könnte ich meinen Termin verschieben?", "Ich möchte meinen Termin verschieben."]
-                            : ["Ich hätte gern einen Termin.", "Ich möchte einen Termin vereinbaren."]),
-            DialogueTurn(title: "5 · Choose a time", partner: "Passt Ihnen Freitag um zehn Uhr?",
-                         task: reschedule ? "Friday does not work. Ask about Monday." : "Say Friday at ten works for you.",
-                         hint: reschedule ? "Freitag passt mir leider nicht. … Montag?" : "Ja … passt mir …",
-                         suggestions: reschedule
-                            ? ["Freitag passt mir leider nicht. Haben Sie am Montag einen Termin frei?", "Haben Sie am Montag Zeit?"]
-                            : ["Ja, Freitag um zehn passt mir.", "Ja, das passt mir."]),
-            DialogueTurn(title: "6 · Confirm", partner: reschedule
-                         ? "Am Montag um neun Uhr ist noch ein Termin frei."
-                         : "Gut, dann bis Freitag um zehn Uhr.",
-                         task: reschedule ? "Accept Monday at nine and say thank you." : "Thank the receptionist and say goodbye.",
-                         hint: "Vielen Dank … Auf Wiedersehen.",
-                         suggestions: reschedule
-                            ? ["Montag um neun passt mir. Vielen Dank. Auf Wiedersehen."]
-                            : ["Vielen Dank. Auf Wiedersehen.", "Danke, bis Freitag."])
-        ]
+    private var paths: [PracticePath] { PreparedPractice.paths(for: lessonID) }
+    private var turns: [PracticeTurn] {
+        guard paths.indices.contains(selectedPath) else { return [] }
+        return paths[selectedPath].turns
     }
 
     var body: some View {
@@ -57,6 +22,20 @@ struct DialogueView: View {
                 Text("Prepared paths, real-life phrases").font(.title2.bold())
                 Text("Not an AI conversation or a pronunciation test. The next line follows the path you choose, not an interpretation of your voice. Responses are not saved.")
                     .font(.callout)
+            }
+            if paths.count > 1 {
+                Section("Choose a prepared path") {
+                    Picker("Your goal", selection: $selectedPath) {
+                        ForEach(paths.indices, id: \.self) { index in
+                            Text(paths[index].title).tag(index)
+                        }
+                    }
+                    .onChange(of: selectedPath) { _ in
+                        stage = 0
+                        resetTurn()
+                    }
+                    Text("Changing paths restarts this practice.").font(.caption)
+                }
             }
             if stage < turns.count {
                 turnView(turns[stage])
@@ -71,7 +50,7 @@ struct DialogueView: View {
                 }
             }
         }
-        .navigationTitle("Appointment practice")
+        .navigationTitle("Speaking practice")
         .onDisappear { audio.stop() }
         .onChange(of: scenePhase) { phase in
             if phase == .background { audio.stop() }
@@ -79,20 +58,12 @@ struct DialogueView: View {
         }
     }
 
-    private func turnView(_ turn: DialogueTurn) -> some View {
+    private func turnView(_ turn: PracticeTurn) -> some View {
         Group {
-            if stage == 3 {
-                Section("Choose the prepared role-play") {
-                    Picker("Your goal", selection: $reschedule) {
-                        Text("Make an appointment").tag(false)
-                        Text("Change an appointment").tag(true)
-                    }
-                    .onChange(of: reschedule) { _ in resetTurn() }
-                }
-            }
             Section(turn.title) {
                 if !turn.partner.isEmpty {
                     Text(turn.partner).font(.title3.bold())
+                    Text(turn.partnerTranslation).foregroundStyle(.secondary)
                     Button { audio.speak(turn.partner) } label: {
                         Label("Listen to the prepared line", systemImage: "speaker.wave.2")
                     }
