@@ -3,6 +3,7 @@ import LearningCore
 
 struct DialogueView: View {
     let lessonID: Int
+    @EnvironmentObject private var model: LearningModel
     @StateObject private var audio = AudioPractice()
     @Environment(\.scenePhase) private var scenePhase
     @State private var stage = 0
@@ -43,6 +44,7 @@ struct DialogueView: View {
                 Section {
                     Label("You’ve finished the dialogue", systemImage: "checkmark.circle")
                     Text("Try it once more without hints, or choose the other path. Independent vocabulary recalls are recorded in Recall, not inferred from speech.")
+                    Text("This practice is recorded as participation in your lesson checklist, not successful vocabulary recall.")
                     Button("Practice again") {
                         stage = 0
                         resetTurn()
@@ -104,6 +106,11 @@ struct DialogueView: View {
                     Button("Continue along this prepared path") {
                         stage += 1
                         resetTurn()
+                        if stage == turns.count {
+                            var work = model.state.workbook[lessonID] ?? LessonWork()
+                            work.speakingPracticed = true
+                            model.update { $0.updateWork(work, for: lessonID) }
+                        }
                     }.buttonStyle(.borderedProminent)
                 }
             }

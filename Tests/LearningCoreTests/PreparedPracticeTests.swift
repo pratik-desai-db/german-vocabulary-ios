@@ -99,8 +99,16 @@ final class PreparedPracticeTests: XCTestCase {
     }
 
     func testUnknownLessonsHaveNoPreparedPaths() {
-        for lessonID in [Int.min, -1, 0, 8, Int.max] {
+        for lessonID in [Int.min, -1, 0, 91, Int.max] {
             XCTAssertTrue(PreparedPractice.paths(for: lessonID).isEmpty)
+        }
+    }
+
+    func testExtendedLessonsUseCurriculumPaths() throws {
+        for lessonID in 8...90 {
+            let day = try XCTUnwrap(Course.day(lessonID))
+            XCTAssertFalse(day.paths.isEmpty, "Missing practice for day \(lessonID)")
+            XCTAssertEqual(PreparedPractice.paths(for: lessonID), day.paths)
         }
     }
 

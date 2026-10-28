@@ -53,7 +53,7 @@ struct RecallView: View {
                 }
                 Text(prompt(item)).font(.title2.bold())
                 if isListening(item) {
-                    AudioButton(text: item.german)
+                    AudioButton(text: item.spokenGerman)
                     Text("Listen, then write the English meaning. This is listening recognition, not a German recall.")
                         .font(.caption)
                 }
@@ -85,7 +85,7 @@ struct RecallView: View {
                     if item.id == "appointments.arrange" && !isListening(item) {
                         Text("Missing word: vereinbaren")
                     }
-                    AudioButton(text: item.german)
+                    AudioButton(text: item.spokenGerman)
                     Text(feedback(item))
                     Text("Other natural wording can be correct. This check is not a grammar or pronunciation score. If unsure, choose Again.")
                         .font(.caption)

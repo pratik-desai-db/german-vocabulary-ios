@@ -14,6 +14,9 @@ final class LearningCoreTests: XCTestCase {
         XCTAssertTrue(state.completedLessons.isEmpty)
         XCTAssertTrue(state.activity.isEmpty)
         XCTAssertTrue(state.reviewHistory.isEmpty)
+        XCTAssertTrue(state.workbook.isEmpty)
+        XCTAssertEqual(LessonWork(), LessonWork(readingResponse: "", writingDraft: "", readingChecked: false,
+                                               writingChecked: false, speakingPracticed: false))
         XCTAssertEqual(ItemProgress(), ItemProgress(encountered: false, successfulRecalls: 0, lapses: 0, note: "", due: nil, intervalDays: 0))
     }
 
@@ -246,7 +249,7 @@ final class LearningCoreTests: XCTestCase {
         XCTAssertEqual(state.completedLessons, [1])
         XCTAssertEqual(DailyPlan(state: state, now: now).lesson.id, 2)
         for lesson in Course.lessons { state.completeLesson(lesson.id) }
-        XCTAssertEqual(DailyPlan(state: state, now: now).lesson.id, 7)
+        XCTAssertEqual(DailyPlan(state: state, now: now).lesson.id, 90)
     }
 
     func testNotesDoNotEncounterAndSurviveReview() throws {
@@ -341,9 +344,9 @@ final class LearningCoreTests: XCTestCase {
         XCTAssertFalse(AnswerMatcher.matches("Z e i t", accepted: ["Zeit"]))
     }
 
-    func testContentHasSixThemedLessonsAndReviewReusesCanonicalItems() {
-        XCTAssertEqual(Course.lessons.map(\.id), Array(1...7))
-        XCTAssertEqual(Course.items.count, 30)
+    func testFoundationHasSixThemedLessonsAndReviewReusesCanonicalItems() {
+        XCTAssertEqual(Course.lessons.prefix(7).map(\.id), Array(1...7))
+        XCTAssertEqual(Course.lessons.prefix(6).flatMap(\.items).count, 30)
         XCTAssertEqual(Set(Course.items.map(\.id)).count, Course.items.count)
         for lesson in Course.lessons.prefix(6) {
             XCTAssertTrue((4...6).contains(lesson.items.count))

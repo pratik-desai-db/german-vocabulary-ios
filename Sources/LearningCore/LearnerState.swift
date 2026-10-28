@@ -40,6 +40,26 @@ public struct ReviewEvent: Codable, Sendable, Equatable {
     }
 }
 
+public struct LessonWork: Codable, Sendable, Equatable {
+    public var readingResponse: String
+    public var writingDraft: String
+    public var readingChecked: Bool
+    public var writingChecked: Bool
+    public var speakingPracticed: Bool
+
+    public init(
+        readingResponse: String = "", writingDraft: String = "",
+        readingChecked: Bool = false, writingChecked: Bool = false,
+        speakingPracticed: Bool = false
+    ) {
+        self.readingResponse = readingResponse
+        self.writingDraft = writingDraft
+        self.readingChecked = readingChecked
+        self.writingChecked = writingChecked
+        self.speakingPracticed = speakingPracticed
+    }
+}
+
 public struct LearnerState: Codable, Sendable, Equatable {
     public var onboardingComplete: Bool
     public var newItemsPerDay: Int
@@ -48,11 +68,13 @@ public struct LearnerState: Codable, Sendable, Equatable {
     public var completedLessons: [Int]
     public var activity: [String: Int]
     public var reviewHistory: [ReviewEvent]
+    public var workbook: [Int: LessonWork]
 
     public init(
         onboardingComplete: Bool = false, newItemsPerDay: Int = 5, targetMinutes: Int = 35,
         records: [String: ItemProgress] = [:], completedLessons: [Int] = [],
-        activity: [String: Int] = [:], reviewHistory: [ReviewEvent] = []
+        activity: [String: Int] = [:], reviewHistory: [ReviewEvent] = [],
+        workbook: [Int: LessonWork] = [:]
     ) {
         self.onboardingComplete = onboardingComplete
         self.newItemsPerDay = newItemsPerDay
@@ -61,10 +83,11 @@ public struct LearnerState: Codable, Sendable, Equatable {
         self.completedLessons = completedLessons
         self.activity = activity
         self.reviewHistory = reviewHistory
+        self.workbook = workbook
     }
 
     private enum CodingKeys: String, CodingKey {
-        case onboardingComplete, newItemsPerDay, targetMinutes, records, completedLessons, activity, reviewHistory
+        case onboardingComplete, newItemsPerDay, targetMinutes, records, completedLessons, activity, reviewHistory, workbook
     }
 
     public init(from decoder: Decoder) throws {
@@ -76,6 +99,7 @@ public struct LearnerState: Codable, Sendable, Equatable {
         completedLessons = try container.decode([Int].self, forKey: .completedLessons)
         activity = try container.decode([String: Int].self, forKey: .activity)
         reviewHistory = try container.decodeIfPresent([ReviewEvent].self, forKey: .reviewHistory) ?? []
+        workbook = try container.decodeIfPresent([Int: LessonWork].self, forKey: .workbook) ?? [:]
     }
 
     /// Exposure is not retrieval: it starts scheduling without awarding a successful recall.
@@ -134,6 +158,19 @@ public struct LearnerState: Codable, Sendable, Equatable {
         guard !completedLessons.contains(id) else { return }
         completedLessons.append(id)
     }
+
+    public mutating func updateWork(_ work: LessonWork, for lessonID: Int) {
+        workbook[lessonID] = work
+    }
+
+    public func canCompleteLesson(_ id: Int) -> Bool {
+        guard let lesson = Course.lessons.first(where: { $0.id == id }),
+              let work = workbook[id],
+              !work.readingResponse.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              !work.writingDraft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              work.readingChecked, work.writingChecked, work.speakingPracticed else { return false }
+        return lesson.items.allSatisfy { records[$0.id]?.encountered == true }
+    }
 }
 
 enum LearningCalendar {
@@ -174,7 +211,7 @@ public struct DailyPlan: Sendable {
         }
         due = Array(dueItems.prefix(20))
         backlogCount = max(0, dueItems.count - 20)
-        lesson = Course.lessons.first { !state.completedLessons.contains($0.id) } ?? Course.lessons[6]
+        lesson = Course.lessons.first { !state.completedLessons.contains($0.id) } ?? Course.lessons.last!
 
         let today = LearningCalendar.dayKey(now)
         let encountersToday = state.records.values.filter { progress in

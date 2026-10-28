@@ -96,7 +96,7 @@ final class SupportedPracticeTests: XCTestCase {
         let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
         XCTAssertEqual(Set(object.keys), [
             "onboardingComplete", "newItemsPerDay", "targetMinutes", "records",
-            "completedLessons", "activity", "reviewHistory"
+            "completedLessons", "activity", "reviewHistory", "workbook"
         ])
     }
 

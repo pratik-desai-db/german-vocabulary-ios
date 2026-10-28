@@ -9,6 +9,10 @@ public struct Vocabulary: Identifiable, Codable, Sendable, Equatable {
     public let cue: String
     public let answers: [String]
 
+    public var spokenGerman: String {
+        String(german.prefix { $0 != "(" }).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     public init(
         id: String, german: String, english: String, example: String,
         translation: String, cue: String, answers: [String]
@@ -150,9 +154,29 @@ public enum Course {
             Lesson(id: 6, title: "Polite requests", goal: "Ask for help and clarification.", items: requests),
             Lesson(id: 7, title: "Review", goal: "Recall useful phrases from all six lessons.",
                    items: [introductions[1], routine[3], shopping[0], appointments[1], transport[2], requests[0]])
-        ]
+        ] + extendedDays.map(\.lesson)
     }()
 
     /// The unique teaching inventory; review references do not introduce new items.
-    public static let items: [Vocabulary] = lessons.prefix(6).flatMap(\.items)
+    public static let items: [Vocabulary] = {
+        var seen = Set<String>()
+        return lessons.flatMap(\.items).filter { seen.insert($0.id).inserted }
+    }()
+
+    static let extendedDays: [CurriculumDay] = MonthOne.days + MonthTwo.days + MonthThree.days
+
+    public static var totalDays: Int { lessons.count }
+
+    public static let weeks: [CourseWeek] = stride(from: 0, to: lessons.count, by: 7).map { start in
+        let id = start / 7 + 1
+        return CourseWeek(id: id, title: "Week \(id)",
+                          days: Array(lessons[start..<min(start + 7, lessons.count)]))
+    }
+
+    public static func day(_ id: Int) -> CurriculumDay? {
+        if (1...7).contains(id) {
+            return foundationDay(for: lessons[id - 1])
+        }
+        return extendedDays.first { $0.id == id }
+    }
 }

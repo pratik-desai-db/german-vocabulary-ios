@@ -393,7 +393,7 @@ public enum PreparedPractice {
                     ])
             ])]
         default:
-            return []
+            return Course.day(lessonID)?.paths ?? []
         }
     }
 }

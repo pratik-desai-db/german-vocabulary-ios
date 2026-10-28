@@ -1,9 +1,15 @@
 # Deutsch Daily
 
-A local-first, vocabulary-first SwiftUI iPhone prototype for an English-speaking
-learner returning after A1. Everyday communication comes first; B1 is a direction,
-not a promised outcome. No account, analytics, ads, external API, or third-party
-runtime dependencies.
+A local-first, vocabulary-first SwiftUI iPhone app with a **90-day German course**
+for an English-speaking learner returning after A1. Everyday communication comes
+first; B1 is a direction, not a promised outcome. No account, analytics, ads,
+external API, or third-party runtime dependencies.
+
+The full course is bundled: **90 learning days, 385 vocabulary entries, 13
+consolidation/reflection days, and prepared speaking, reading, writing and grammar
+support for every day**. This is an original guided course, not an official telc
+curriculum or a substitute for human language feedback. A learning day can take
+more than one calendar day, especially with a low new-item allowance or backlog.
 
 ## Run on an iPhone or Simulator
 
@@ -25,6 +31,10 @@ default branch. No signing certificates or Apple credentials belong in Git.
 4. Start with the short knowledge check, or skip it. The default is five new
    items and a flexible 35-minute target. Change either in Settings; zero new
    items gives a review-only day.
+5. Course is organized by week and is searchable by topic, German phrase, or
+   English meaning. Today opens the next incomplete day. Each day has vocabulary
+   cards, a prepared speaking path, and a workbook. Visit the cards, finish the
+   dialogue, and self-check the reading and writing before marking it completed.
 
 Command-line simulator build (from the checkout directory):
 
@@ -47,21 +57,33 @@ store submission are out of scope.
   claiming it was recalled. This is a three-item self-check, not an A1/B1
   placement examination. It uses today's new-item allowance: lower allowances
   shorten the check, and zero skips new samples.
-- **Today:** oldest due reviews, new vocabulary, prepared speaking, then a short
-  personal writing/listening activity. The 30–40 minute plan is a suggested
-  routine, not a measured duration. More time comes from reusing phrases, not
-  unlocking large amounts of new vocabulary.
-- **Course:** seven learning steps, not seven calendar deadlines:
+- **Today:** oldest due reviews, new vocabulary, prepared speaking, and the day's
+  reading/writing workbook. The 30–40 minute plan is a suggested routine, not a
+  measured duration. Change the target or take a review-only day when necessary.
+- **Course:** 12 full weeks plus a six-day final block. Weekly consolidation
+  reuses earlier vocabulary IDs instead of counting the same words as new:
 
-  | Step | Theme |
+  | Week / days | Focus |
   | --- | --- |
-  | 1 | Introductions |
-  | 2 | Daily routine |
-  | 3 | Shopping |
-  | 4 | Appointments |
-  | 5 | Transport |
-  | 6 | Problems and requests |
-  | 7 | Review and use of earlier vocabulary |
+  | 1 / 1–7 | Introductions, routine, shopping, appointments, transport, requests |
+  | 2 / 8–14 | Family, home, food, café, clothes/weather, weekend plans |
+  | 3 / 15–21 | Neighbourhood, directions, dates, health communication, invitations |
+  | 4 / 22–28 | Housing, repairs, phone calls, parcels, payments, travel bookings |
+  | 5 / 29–35 | Past experiences, work, applications, education, learning strategies |
+  | 6 / 36–42 | Habits, sport, preferences, celebrations, suggestions and opinions |
+  | 7 / 43–49 | Office messages, formal emails, complaints, returns and documents |
+  | 8 / 50–56 | Media, technology, safety, environment, transport and cooperation |
+  | 9 / 57–63 | Reasons, comparisons, experiences, plans and organising an outing |
+  | 10 / 64–70 | Moving, interviews, family arrangements, volunteering and disruption |
+  | 11 / 71–77 | Notices, listening details, emails, descriptions and joint planning |
+  | 12 / 78–84 | Problem solving, compromise, summaries, opinions and reflection |
+  | 13 / 85–90 | Reading/writing and speaking rehearsal, repair strategies, final plan |
+
+  Month 1 refreshes practical A1/A2 foundations (days 1–28); month 2 connects
+  ideas and situations (29–56); month 3 adds B1-oriented communicative tasks
+  (57–90). Every seventh day and day 90 consolidate rather than introduce new
+  vocabulary. Each other day has five words or useful phrases with English,
+  examples, audio and memory cues.
 
 - **Appointment lesson:** `der Termin / die Termine`, `einen Termin vereinbaren`,
   `verschieben`, `Zeit haben`, and `Es passt mir.` with English meanings, natural
@@ -75,15 +97,27 @@ store submission are out of scope.
   and common German keyboard spellings, but cannot assess every valid paraphrase.
   You make the final meaning-based assessment. Listening recognition, hints and
   card visits do not inflate successful independent recall totals.
-- **Speaking:** every first-week lesson has its own repeat → guided answer →
+- **Speaking:** every lesson has its own repeat → guided answer →
   unaided prompt → prepared everyday dialogue. Today follows the current lesson;
   open any other theme from Course. Appointments has make-an-appointment and
   change-an-appointment paths. The next
-  receptionist line follows that explicit choice, not AI interpretation. Hints
+  partner line follows that explicit choice, not AI interpretation. Hints
   and suggested responses remain available. Edit a transcript or type instead.
+- **Workbook:** a grammar pattern with an English explanation, an original German
+  passage with optional English support and audio, a comprehension question,
+  and a writing prompt with a checklist and a German model. Type first, then
+  compare meaning; natural alternatives are welcome. Reading responses, writing
+  drafts and self-checks persist per day. Editing a response clears its completed
+  self-check. Grammar and writing are not automatically graded.
 - **Progress:** encountered items, items recalled at least once, total successful
   attempts, completed lessons, difficult vocabulary, and recent learning
-  activity. Visiting every card enables lesson completion; this is not mastery.
+  activity, plus weekly completion totals. Lesson completion requires cards,
+  reading and writing self-checks, and prepared dialogue participation; it does
+  not count those activities as independent vocabulary recalls or certify mastery.
+
+At the end, day 90 remains available as a reflection and reuse day while due
+reviews continue. The app does not reset progress or declare an exam pass.
+Use your final personal plan to identify gaps and arrange further practice.
 
 ## Scheduling and persistence
 
@@ -107,6 +141,10 @@ State is atomically saved as JSON in the app sandbox's Application Support
 directory after changes. Save failures are shown and can be retried. Unreadable
 state is not silently replaced; restore a backup rather than discarding it.
 There is no account, app-managed cloud synchronization, or export/import UI.
+Upgrading from the first-week version preserves the original vocabulary IDs,
+notes, review history, settings and completed days. Missing workbook fields in
+older save files default to an empty workbook; previously completed lessons
+remain completed. New completions use the fuller participation checklist.
 
 ## Audio, microphone, and privacy
 
@@ -129,13 +167,13 @@ There is no account, app-managed cloud synchronization, or export/import UI.
 - Local files are protected by the iOS app sandbox and the device's system data
   protection; this is not an independently encrypted vault. Avoid putting
   sensitive information in notes.
-- Progress, notes, settings and review history remain in the app's local
+- Progress, notes, workbook drafts, self-checks, settings and review history remain in the app's local
   container. **Apple iCloud/Finder device backups may include them**, depending
   on your backup settings. This app does not control Apple's backup transport.
   Deleting the app, losing the phone, or changing devices without a restorable
   backup can lose all progress. Review device backup settings yourself.
 
-There is **no unconstrained offline AI conversation, grammar tutor, or reliable
+There is **no unconstrained offline AI conversation, automated grammar tutor, or reliable
 pronunciation score**. A transcript is not evidence of good pronunciation. The
 prepared answer matcher is deliberately limited; alternative valid German can
 be self-assessed.
@@ -152,6 +190,9 @@ Tests cover course integrity, answer normalization, recall scheduling, daily
 budgets, backlogs/missed days, notes and progress, and local persistence including
 corrupt-data handling. UI and platform audio need the manual device checks below.
 Prepared-dialogue integrity and supported-practice scheduling have focused tests.
+Full-course tests check all 90 days, canonical vocabulary reuse on review days,
+reading/writing coverage, week grouping, legacy-save migration, workbook
+persistence, completion requirements and an end-to-end progression simulation.
 
 ### Automated Mac build
 
@@ -188,6 +229,13 @@ does not itself establish a successful iOS build.
    color alone.
 7. Leave due items waiting, then return after a missed day; check oldest-first
    capped reviews, lower new workload and no loss of existing progress.
+8. Open days 8, 29, 57, 84 and 90. Read/listen to the text, answer and compare,
+   write a draft and self-check, and complete a prepared dialogue. Relaunch and
+   confirm the draft/checklist is preserved. Edit a draft and confirm its
+   writing self-check resets without changing recall totals.
+9. Browse all 13 week sections and search for a late-course topic. Complete all
+   activities on a day and mark it complete; verify Today advances only then.
+   If upgrading an earlier install, verify earlier notes and reviews survive.
 
 ### Implementation environment limitations
 
@@ -202,7 +250,10 @@ the iOS build dependencies; it did not provide completed security analysis.
 
 ## B1 and telc
 
-This first week supports practical vocabulary refresh. It is not a complete
-three-month curriculum, an official telc product, or a guarantee of telc Deutsch
-B1 readiness. Combine it with official model tests, timed writing and reading,
-broader listening, and conversation with a teacher or partner.
+The 90-day course supports practical vocabulary refresh and progressively longer
+communication tasks. It is not an official telc product, a complete inventory of
+all B1 vocabulary/grammar, a full exam simulator, or a guarantee of telc Deutsch
+B1 readiness in three months. Later rehearsal activities are original support
+tasks: they do not reproduce official papers, assign official scores, or replace
+timed model tests. Combine the course with official practice, broader listening,
+and conversation and writing feedback from a teacher or partner.
