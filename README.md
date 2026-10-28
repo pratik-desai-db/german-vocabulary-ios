@@ -163,6 +163,11 @@ linking without any Apple account, device registration, or signing secrets.
 A green build is not a substitute for launching the app and checking
 microphone, speech, VoiceOver and offline behavior on your iPhone.
 If the checks fail, open the failed step and share its Xcode error output.
+GitHub may require an owner to approve workflows proposed by Copilot. If a run
+shows **Action required**, review the workflow in the PR and use GitHub's
+workflow approval control; no build jobs have run until that approval. The first
+runs for this development pass were gated this way, so adding the workflow
+does not itself establish a successful iOS build.
 
 ### Device acceptance checklist
 
