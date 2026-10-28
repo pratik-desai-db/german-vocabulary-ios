@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Deutsch Daily — a book in conversation</title>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#167B80"/>
+      <stop offset="1" stop-color="#083F50"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#FFFDF2"/>
+      <stop offset="1" stop-color="#F5E7C7"/>
+    </linearGradient>
+    <clipPath id="bookmark">
+      <path d="M624 268h112v222l-56-34-56 34Z"/>
+    </clipPath>
+  </defs>
+  <path fill="url(#background)" d="M0 0h1024v1024H0Z"/>
+  <circle cx="185" cy="155" r="340" fill="#58B8AB" opacity=".09"/>
+  <circle cx="939" cy="962" r="390" fill="#022E43" opacity=".16"/>
+  <path fill="#022F3C" opacity=".26" transform="translate(0 22)"
+        d="M512 318c-95-59-199-67-316-38-22 5-36 23-36 46v345c0 25 21 43 46 39 52-9 96-9 144-1l-14 102 131-84c25 9 39 17 45 21 85-54 180-64 306-38 25 5 46-14 46-39V326c0-23-14-41-36-46-117-29-221-21-316 38Z"/>
+  <path fill="url(#paper)"
+        d="M512 300c-95-59-199-67-316-38-22 5-36 23-36 46v345c0 25 21 43 46 39 52-9 96-9 144-1l-14 102 131-84c25 9 39 17 45 21 85-54 180-64 306-38 25 5 46-14 46-39V308c0-23-14-41-36-46-117-29-221-21-316 38Z"/>
+  <path d="M512 317v373" fill="none" stroke="#D7C8A6" stroke-width="16" stroke-linecap="round"/>
+  <path d="M236 379c73-12 131-2 196 26M236 461c73-12 131-2 196 26M236 543c53-8 96-4 139 9"
+        fill="none" stroke="#2B7779" stroke-width="27" stroke-linecap="round"/>
+  <path d="M596 559c66-19 122-22 192-8" fill="none" stroke="#2B7779" stroke-width="27" stroke-linecap="round"/>
+  <g clip-path="url(#bookmark)">
+    <path fill="#25353C" d="M624 268h112v74H624Z"/>
+    <path fill="#E7584E" d="M624 342h112v74H624Z"/>
+    <path fill="#F4BE46" d="M624 416h112v74H624Z"/>
+  </g>
+</svg>
