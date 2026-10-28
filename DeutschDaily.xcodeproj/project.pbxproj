@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B4CECA40DB344A18A49B0191 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4CECA40DB344A18A49B0192 /* Assets.xcassets */; };
 		0FE50E2198FCB80A75FC6566 /* CourseViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F3DB9DEDFF50EA9559A75A /* CourseViews.swift */; };
 		287FA02E6D7A33CD7C0D4C7C /* DeutschDailyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D11DEF71C5C435EFE9BEB60 /* DeutschDailyApp.swift */; };
 		2894957B292BC15E94E62927 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F545A0F3BF7E26995B81E1 /* Foundation.framework */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B4CECA40DB344A18A49B0192 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		002F05A9B37AC3381D4D2DC5 /* DialogueView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DialogueView.swift; sourceTree = "<group>"; };
 		0D11DEF71C5C435EFE9BEB60 /* DeutschDailyApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeutschDailyApp.swift; sourceTree = "<group>"; };
 		700E7171ED725B1EE8EEA592 /* RecallView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecallView.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 		CCF621A8A7B9C73703AF68E2 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				B4CECA40DB344A18A49B0192 /* Assets.xcassets */,
 				BA8116F007803B3FCEC35446 /* AudioPractice.swift */,
 				78F3DB9DEDFF50EA9559A75A /* CourseViews.swift */,
 				0D11DEF71C5C435EFE9BEB60 /* DeutschDailyApp.swift */,
@@ -152,6 +155,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4CECA40DB344A18A49B0191 /* Assets.xcassets in Resources */,
 				2AD546A141F2A06FF1DE03E7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,6 +182,7 @@
 		00EC4F8DB90739A2C6F474D8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -315,6 +320,7 @@
 		901900834712C037C56CF401 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

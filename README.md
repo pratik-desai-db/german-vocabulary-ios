@@ -248,6 +248,37 @@ acceptance checklist above on macOS/iPhone before relying on the prototype.
 The CodeQL Swift check was attempted but could not create a database without
 the iOS build dependencies; it did not provide completed security analysis.
 
+## App icon
+
+The original icon combines an open vocabulary book and a speech-bubble tail,
+with an ivory/teal palette and a black-red-gold bookmark. It uses no text, fonts,
+stock artwork, or external services. Editable artwork is in `Design/AppIcon.svg`;
+the bundled image is `App/Assets.xcassets/AppIcon.appiconset/AppIcon.png`.
+The PNG is a full-bleed, opaque, 8-bit RGB, sRGB **1024 × 1024** image without an
+alpha channel or pre-rounded corners. The iOS universal single-size catalog
+(supported by the project's Xcode 16+/iOS 17+ baseline) lets Xcode generate
+home-screen, Spotlight, Settings, notification, and App Store sizes. The catalog
+is in the app target's Resources phase; Debug and Release both select `AppIcon`.
+The same artwork is used for all appearances; no separate dark/tinted artwork
+is supplied.
+
+This branch incorporates PR #1's app snapshot at `ba1865c` by merge, without
+editing its implementation. PR #1's head branch is not changed. For coordinated
+integration, merge PR #1 first, then this icon PR into `main` (shared commits
+will not duplicate the app), or cherry-pick only the icon commit onto PR #1's
+head. Do not replace newer app files with this snapshot.
+
+The export used local CairoSVG 2.9.0 at 4× resolution, then Pillow 13.0.0 Lanczos
+downsampling to 1024 and RGB conversion with a PNG `sRGB` chunk (rendering intent
+0). These are artwork tooling only, not app dependencies. `swift test --filter
+AppIconTests` checks the catalog, PNG header/color metadata, and target wiring.
+The PNG was also decoded and visually inspected at launcher sizes on Linux.
+Xcode/`actool`, Simulator, device installation, and an App Store archive cannot
+be verified here. On macOS, run the simulator build above in Debug and Release,
+check for asset compiler warnings, then install and inspect the home-screen icon.
+PR #1's iOS workflow was `action_required` with no jobs at inspection time;
+a repository owner must approve it before it can establish an iOS build result.
+
 ## B1 and telc
 
 The 90-day course supports practical vocabulary refresh and progressively longer
