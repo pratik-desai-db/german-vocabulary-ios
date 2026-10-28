@@ -40,7 +40,8 @@ store submission are out of scope.
 - **Starting check:** listening recognition, meaning recognition, then independent
   German recall. Familiar recognition delays an item's next review without
   claiming it was recalled. This is a three-item self-check, not an A1/B1
-  placement examination.
+  placement examination. It uses today's new-item allowance: lower allowances
+  shorten the check, and zero skips new samples.
 - **Today:** oldest due reviews, new vocabulary, prepared speaking, then a short
   personal writing/listening activity. The 30–40 minute plan is a suggested
   routine, not a measured duration. More time comes from reusing phrases, not
@@ -165,6 +166,8 @@ App Swift syntax and project/plist structure can be checked here, but **a
 successful iOS build, launch, VoiceOver layout, and physical-device audio and
 permission checks cannot be claimed from this environment**. Run the build and
 acceptance checklist above on macOS/iPhone before relying on the prototype.
+The CodeQL Swift check was attempted but could not create a database without
+the iOS build dependencies; it did not provide completed security analysis.
 
 ## B1 and telc
 

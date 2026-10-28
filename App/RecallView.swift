@@ -2,7 +2,7 @@ import SwiftUI
 import LearningCore
 
 struct RecallView: View {
-    let items: [Vocabulary]
+    @State private var items: [Vocabulary]
     @EnvironmentObject private var model: LearningModel
     @State private var index = 0
     @State private var answer = ""
@@ -11,6 +11,10 @@ struct RecallView: View {
     @State private var hintVisible = false
     @State private var attempts = 0
     @State private var successes = 0
+
+    init(items: [Vocabulary]) {
+        _items = State(initialValue: items)
+    }
 
     var body: some View {
         Group {

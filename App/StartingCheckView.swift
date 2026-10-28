@@ -6,9 +6,7 @@ struct StartingCheckView: View {
     @State private var step = 0
     @State private var answer = ""
     @State private var revealed = false
-    private var samples: [Vocabulary] {
-        Array(Course.lessons.prefix(3).compactMap { $0.items.first })
-    }
+    @State private var samples: [Vocabulary] = []
 
     var body: some View {
         NavigationStack {
@@ -31,7 +29,9 @@ struct StartingCheckView: View {
                     }
                     Section {
                         Text("No account or tracking. Progress and notes stay in this app on your phone. Device backups may include them. Speaking is optional and requires on-device recognition.")
-                        Button("Start the short check") { step = 1 }
+                        Text("The check uses up to three new items from today’s allowance. With zero new items, new samples are skipped.")
+                            .font(.caption)
+                        Button("Start the short check") { startCheck() }
                         Button("Skip check and start fresh") { finish() }
                     }
                 } else if step <= samples.count {
@@ -45,8 +45,20 @@ struct StartingCheckView: View {
                     }
                 }
             }
-            .navigationTitle(step == 0 ? "Deutsch Daily" : "Starting check \(min(step, 3)) / 3")
+            .navigationTitle(step == 0 ? "Deutsch Daily" :
+                                (step <= samples.count ? "Starting check \(step) / \(samples.count)" : "Ready"))
         }
+    }
+
+    private func startCheck() {
+        var budget = model.plan.remainingNewItemBudget
+        samples = Course.lessons.prefix(3).compactMap { $0.items.first }.filter { item in
+            if model.state.records[item.id]?.encountered == true { return true }
+            guard budget > 0 else { return false }
+            budget -= 1
+            return true
+        }
+        step = 1
     }
 
     private func check(_ item: Vocabulary) -> some View {
